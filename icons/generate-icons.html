@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Icon Generator</title>
+    </head>
+
+    <body>
+        <canvas id="canvas192" width="192" height="192"></canvas>
+        <canvas id="canvas512" width="512" height="512"></canvas>
+
+        <script>
+            function generateIcon(canvasId, size) {
+                const canvas = document.getElementById(canvasId);
+                const ctx = canvas.getContext('2d');
+
+                // Background gradient
+                const gradient = ctx.createLinearGradient(0, 0, size, size);
+                gradient.addColorStop(0, '#667eea');
+                gradient.addColorStop(1, '#764ba2');
+
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, size, size);
+
+                // White circle
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.beginPath();
+                ctx.arc(size / 2, size / 2, size * 0.4, 0, 2 * Math.PI);
+                ctx.fill();
+
+                // Musical note
+                const noteSize = size * 0.15;
+                const noteX = size * 0.35;
+                const noteY = size * 0.4;
+
+                ctx.fillStyle = '#667eea';
+                // Note head
+                ctx.beginPath();
+                ctx.ellipse(noteX + noteSize, noteY + noteSize * 2, noteSize * 0.4, noteSize * 0.3, 0, 0, 2 * Math.PI);
+                ctx.fill();
+
+                // Note stem
+                ctx.fillRect(noteX + noteSize * 1.2, noteY, noteSize * 0.15, noteSize * 1.5);
+
+                // Hand gesture (simplified)
+                const handX = size * 0.3;
+                const handY = size * 0.6;
+                const handSize = size * 0.2;
+
+                ctx.fillStyle = '#667eea';
+                // Palm
+                ctx.beginPath();
+                ctx.ellipse(handX + handSize, handY + handSize * 0.8, handSize * 0.6, handSize * 0.4, 0, 0, 2 * Math.PI);
+                ctx.fill();
+
+                // Extended index finger
+                ctx.beginPath();
+                ctx.ellipse(handX + handSize * 0.7, handY + handSize * 0.3, handSize * 0.15, handSize * 0.6, -0.2, 0, 2 * Math.PI);
+                ctx.fill();
+
+                // Extended middle finger
+                ctx.beginPath();
+                ctx.ellipse(handX + handSize, handY + handSize * 0.3, handSize * 0.15, handSize * 0.6, 0, 0, 2 * Math.PI);
+                ctx.fill();
+
+                // Sound waves
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+                ctx.lineWidth = size * 0.01;
+
+                for (let i = 0; i < 3; i++) {
+                    ctx.beginPath();
+                    ctx.arc(size * 0.7, size * 0.3, size * 0.1 + i * size * 0.05, 0, 2 * Math.PI);
+                    ctx.stroke();
+                }
+
+                // Download link
+                const link = document.createElement('a');
+                link.download = `icon-${size}.png`;
+                link.href = canvas.toDataURL();
+                link.textContent = `Download ${size}x${size}`;
+                link.style.display = 'block';
+                link.style.margin = '10px';
+                document.body.appendChild(link);
+            }
+
+            // Generate both sizes
+            generateIcon('canvas192', 192);
+            generateIcon('canvas512', 512);
+        </script>
+    </body>
+
+</html>

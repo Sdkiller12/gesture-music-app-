@@ -1,0 +1,93 @@
+{
+  "name": "Gesture Music App",
+  "short_name": "GestureMusic",
+  "description": "Contrôlez la musique avec vos gestes de main grâce à l'IA",
+  "version": "1.0.0",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#6366f1",
+  "background_color": "#667eea",
+  "scope": "/",
+  "lang": "fr",
+  "dir": "ltr",
+  "categories": ["music", "entertainment", "utilities"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "icons/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Interface principale de l'application"
+    },
+    {
+      "src": "icons/screenshot-mobile.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Vue mobile de l'application"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Démarrer la musique",
+      "short_name": "Start",
+      "description": "Démarrer la détection de gestes et l'audio",
+      "url": "/?action=start",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Presets",
+      "short_name": "Presets",
+      "description": "Gérer les presets de configuration",
+      "url": "/?action=presets",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "edge_side_panel": {
+    "preferred_width": 400
+  },
+  "launch_handler": {
+    "client_mode": "focus-existing"
+  },
+  "file_handlers": [
+    {
+      "action": "/",
+      "accept": {
+        "application/json": [".json"]
+      }
+    }
+  ],
+  "protocol_handlers": [
+    {
+      "protocol": "web+gesturemusic",
+      "url": "/?protocol=%s"
+    }
+  ]
+}

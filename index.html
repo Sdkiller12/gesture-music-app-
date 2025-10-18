@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Gesture Music App</title>
+        <link rel="manifest" href="manifest.json">
+        <link rel="stylesheet" href="style.css">
+        <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+        <link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+        <meta name="theme-color" content="#6366f1">
+        <meta name="description" content="Contrôlez la musique avec vos gestes de main grâce à l'IA">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+        <link rel="apple-touch-icon" href="icons/icon-192.png">
+
+        <!-- Performance hints -->
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+        <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+        <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+        <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+        <link rel="preload" as="script" href="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js">
+    </head>
+
+    <body>
+        <div class="app-container">
+            <!-- Header -->
+            <header class="header">
+                <h1>🎵 Gesture Music App</h1>
+                <div class="status-indicators">
+                    <div class="status-item">
+                        <span class="status-label">Caméra:</span>
+                        <span id="camera-status" class="status-value">⏳ Initialisation...</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Audio:</span>
+                        <span id="audio-status" class="status-value">🔇 Arrêté</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">Note:</span>
+                        <span id="note-status" class="status-value">—</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <!-- Camera Section -->
+                <section class="camera-section">
+                    <div class="camera-container">
+                        <video id="video" autoplay muted playsinline></video>
+                        <canvas id="canvas"></canvas>
+                        <div class="camera-overlay">
+                            <div class="gesture-guide">
+                                <h3>Guide des gestes</h3>
+                                <div class="finger-status">
+                                    <div class="finger-item">
+                                        <span class="finger-name">Index:</span>
+                                        <span id="index-status" class="finger-indicator">—</span>
+                                    </div>
+                                    <div class="finger-item">
+                                        <span class="finger-name">Majeur:</span>
+                                        <span id="middle-status" class="finger-indicator">—</span>
+                                    </div>
+                                    <div class="finger-item">
+                                        <span class="finger-name">Annulaire:</span>
+                                        <span id="ring-status" class="finger-indicator">—</span>
+                                    </div>
+                                    <div class="finger-item">
+                                        <span class="finger-name">Auriculaire:</span>
+                                        <span id="pinky-status" class="finger-indicator">—</span>
+                                    </div>
+                                    <div class="finger-item">
+                                        <span class="finger-name">Pouce:</span>
+                                        <span id="thumb-status" class="finger-indicator">—</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Controls Section -->
+                <section class="controls-section">
+                    <div class="control-panel">
+                        <h3>Contrôles Audio</h3>
+
+                        <!-- Audio Controls -->
+                        <div class="control-group">
+                            <button id="start-audio" class="btn btn-primary">🎵 Démarrer Audio</button>
+                            <button id="stop-audio" class="btn btn-secondary" disabled>⏹️ Arrêter Audio</button>
+                            <button id="test-audio" class="btn btn-info">🔊 Test Audio</button>
+                        </div>
+
+                        <!-- Hand Assignment -->
+                        <div class="control-group">
+                            <h4>Assignation des mains</h4>
+                            <div class="hand-controls">
+                                <div class="hand-control">
+                                    <label for="hand1-role">Main 1 (Gauche):</label>
+                                    <select id="hand1-role">
+                                        <option value="notes">Notes MIDI</option>
+                                        <option value="effects">Effets Audio</option>
+                                        <option value="volume">Volume</option>
+                                    </select>
+                                </div>
+                                <div class="hand-control">
+                                    <label for="hand2-role">Main 2 (Droite):</label>
+                                    <select id="hand2-role">
+                                        <option value="effects">Effets Audio</option>
+                                        <option value="notes">Notes MIDI</option>
+                                        <option value="volume">Volume</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Audio Parameters -->
+                        <div class="control-group">
+                            <h4>Paramètres Audio</h4>
+                            <div class="param-controls">
+                                <div class="param-item">
+                                    <label for="filter-cutoff">Filtre Cutoff:</label>
+                                    <input type="range" id="filter-cutoff" min="100" max="2000" value="1000">
+                                    <span id="filter-value">1000 Hz</span>
+                                </div>
+                                <div class="param-item">
+                                    <label for="distortion">Distorsion:</label>
+                                    <input type="range" id="distortion" min="0" max="100" value="0">
+                                    <span id="distortion-value">0%</span>
+                                </div>
+                                <div class="param-item">
+                                    <label for="volume">Volume:</label>
+                                    <input type="range" id="volume" min="0" max="100" value="50">
+                                    <span id="volume-value">50%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Presets Management -->
+                        <div class="control-group">
+                            <h4>Gestion des Presets</h4>
+                            <div class="preset-controls">
+                                <input type="text" id="preset-name" placeholder="Nom du preset">
+                                <button id="save-preset" class="btn btn-success">💾 Sauvegarder</button>
+                                <button id="load-preset" class="btn btn-info">📂 Charger</button>
+                                <button id="delete-preset" class="btn btn-danger">🗑️ Supprimer</button>
+                            </div>
+                            <div class="preset-list">
+                                <select id="preset-select" size="5">
+                                    <option value="">Sélectionner un preset...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Audio Visualization -->
+                <section class="visualization-section">
+                    <div class="visualization-container">
+                        <h3>Visualisation Audio</h3>
+                        <canvas id="audio-canvas" width="400" height="200"></canvas>
+                    </div>
+                </section>
+            </main>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <p>Gesture Music App - Contrôlez la musique avec vos gestes</p>
+                <div class="install-prompt" id="install-prompt" style="display: none;">
+                    <button id="install-btn" class="btn btn-primary">📱 Installer l'App</button>
+                </div>
+            </footer>
+        </div>
+
+        <!-- Scripts -->
+        <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@mediapipe/control_utils/control_utils.js"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+        <script src="script.js"></script>
+    </body>
+
+</html>

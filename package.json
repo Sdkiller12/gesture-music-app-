@@ -1,0 +1,29 @@
+{
+  "name": "gesture-music-app",
+  "version": "1.0.0",
+  "description": "Contrôlez la musique avec vos gestes de main grâce à l'IA",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx live-server .",
+    "test": "echo \"Ouvrir index.html dans un navigateur pour tester\""
+  },
+  "keywords": [
+    "music",
+    "gesture",
+    "mediapipe",
+    "tone.js",
+    "pwa",
+    "web-audio"
+  ],
+  "author": "Gesture Music App",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/gesture-music-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/your-username/gesture-music-app/issues"
+  },
+  "homepage": "https://github.com/your-username/gesture-music-app#readme"
+}
